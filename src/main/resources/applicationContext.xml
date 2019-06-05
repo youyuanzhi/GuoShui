@@ -36,7 +36,7 @@
 	<!-- 配置扫描器 将mybatis接口的实现加入到ioc容器中-->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<!--扫描所有的dao接口的实现，加入到ioc容器中  -->
-		<property name="basePackage" value="com.yuanzhi.dao"></property>
+		<property name="basePackage" value="com.yuanzhi.mapper"></property>
 	</bean>
 	<!--===================================================  -->
 	
@@ -71,5 +71,51 @@
 	 </tx:advice>
 	 
 	 <!-- spring配置文件的核心点 -->
+	 
+	 <bean id="myShiro" class="com.yuanzhi.util.MyShiro"> 
+	 </bean>
+	 <bean id="cacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager">
+	 	
+	 </bean>
+		 
+	 <!-- 配置权限管理器 -->
+	 <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+	 <!-- 配置对应的realm，即myshiro -->
+	 <property name="realm" ref="myShiro"></property>
+	 <property name="cacheManager" ref="cacheManager"></property>
+	 </bean>
+	 
+	 
+	 
+	 <!-- 配置shiro过滤器工厂，id值要对应web.xml中设置的过滤器filter-name一致 -->
+	 <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+	 	<property name="securityManager" ref="securityManager"></property>
+	 	<!-- 配置登录的请求地址 -->
+	 	<property name="loginUrl" value="/login"></property>
+	 	<!-- 配置登录成功后跳转的地址，如果访问的是非login请求，则跳转到你访问的页面 -->
+	 	<property name="successUrl" value="/user"></property>
+	 	<!-- 如果请求的资源，不在你的权限范围之内，直接跳转到403请求地址 -->
+	 	<property name="unauthorizedUrl" value="/403"></property>
+		<!-- 配置权限 -->
+		<property name="filterChainDefinitions">
+			<value>
+				<!--anon表示此地址不需要任何权限  -->
+				common/**=anon
+				css/**=anon
+				images/**=anon
+				js/**=anon
+				<!-- 表示进去/user路径必须是使用grzx权限的用户 -->
+				/user=perms[grzx]
+				<!--想要使用这个路径的必须是 -->
+				/user/delete=roles[1]
+				/user/add=roles[2]
+				/user/edit/**=roles[1]
+				<!-- 所有的请求(除去上面的无需访问权限的资源都需要通过登录验证，如果未登录则跳转到/login) -->
+				/**=authc
+			</value>
+		</property>
+	
+	 </bean>
+	 
 	 
 </beans>

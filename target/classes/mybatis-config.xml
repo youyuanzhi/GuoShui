@@ -10,7 +10,7 @@
 	
 	
 	<typeAliases>
-		<package name="com.yuanzhi.bean"/>
+		<package name="com.yuanzhi.pojo"/>
 	</typeAliases>
 	
 	<plugins>

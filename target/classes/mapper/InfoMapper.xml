@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuanzhi.mapper.InfoMapper">
+	
+	<resultMap type="info" id="baseresultMap">
+		<id property="infoId" column="info_id"/>
+		<result property="type" column="type"/>
+		<result property="source" column="source"/>
+		<result property="title" column="title"/>
+		<result property="content" column="content"/>
+		<result property="memo" column="memo"/>
+		<result property="creator" column="creator"/>
+		<result property="create_time" column="create_time"/>
+		<result property="state" column="state"/>
+	
+	</resultMap>
+	
+	<select id="getAllInfo" resultMap="baseresultMap" >
+		select * from info where state = '1'
+	</select>
+
+	<select id="showInfoOne" parameterType="java.lang.String" resultMap="baseresultMap">
+	
+	select * from info where info_id = #{value}
+	
+	</select>
+
+</mapper>

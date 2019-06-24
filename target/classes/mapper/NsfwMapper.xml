@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuanzhi.mapper.NsfwMapper">
+	
+	<resultMap type="role" id="baseResultMap1">
+		<id property="role_id" column="role_id" javaType="java.lang.String"/>
+		<result property="name" column="name" javaType="java.lang.String"/>
+		<result property="state" column="state" javaType="java.lang.String"/>	
+		<collection property="privileges" ofType="privilege" javaType="java.util.List" column="role_id" select="selectAllPrivilege">
+		</collection>
+	</resultMap>
+	
+		<resultMap type="role" id="baseResultMap2">
+		<id property="role_id" column="role_id" javaType="java.lang.String"/>
+		<result property="name" column="name" javaType="java.lang.String"/>
+		<result property="state" column="state" javaType="java.lang.String"/>	
+		<collection property="privileges" ofType="privilege" >
+			<result	property="role_id" column="rp_role_id"/>
+			<result property="code" column="code"/>
+		</collection>
+	</resultMap>
+	
+	<select id="selectAllRoles" resultMap="baseResultMap1">
+		select role_id , name , state 
+		from role  
+	</select>
+	
+	
+	<select id="selectAllPrivilege" resultType="privilege" parameterType="java.lang.String">
+		select * from role_privilege where role_id = #{value}
+	
+	</select>
+	
+	<select id="selectRoleByName" resultType="java.lang.Integer" parameterType="java.lang.String" >
+		select count(role_id) from role
+		where name= #{value}
+		
+	</select>
+	
+	<insert id="addRole">
+		insert into role(role_id,name,state)
+		values(#{id},#{name},#{state})
+	</insert>
+	
+	<insert id="addRolePrivilege">
+		insert into role_privilege
+		values(#{roleId},#{privilege})
+	</insert>
+	
+	<select id="roleEditUI" resultMap="baseResultMap2" parameterType="java.lang.String">
+		select r.* , rp.role_id rp_role_id,rp.code 
+		from role r 
+		left join role_privilege rp
+		on r.role_id = rp.role_id
+		where r.role_id = #{value}
+	</select>
+	
+	
+	<update id="roleEditRole" >
+		update role set name = #{name} , state = #{state}
+		where role_id = #{id}
+	</update>
+	
+	<delete id="deletePrivilege" parameterType="java.lang.String">
+		delete from role_privilege
+		where role_id = #{value}
+	</delete>
+	
+	
+</mapper>

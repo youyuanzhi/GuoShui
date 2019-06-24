@@ -8,10 +8,17 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
 	
 	<!-- springmvc的配置文件，包含网页跳转逻辑的控制，配置 -->
-	<context:component-scan base-package="com.yuanzhi" use-default-filters="false">
+	<mvc:annotation-driven></mvc:annotation-driven>
+	<context:component-scan base-package="com.yuanzhi" >
 		<!-- 只扫描控制器 -->
-		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
+	
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize">
+			<value>6291455</value>
+		</property>
+	</bean>
 	
 	<!-- 配置视图解析器，方便页面返回 -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -19,11 +26,22 @@
 		<property name="suffix" value=".jsp"></property>
 	</bean>
 	
+	<!-- 静态资源配置 -->
+	<mvc:resources location="/css/" mapping="/css/**"></mvc:resources>
+	<mvc:resources location="/js/" mapping="/js/**"></mvc:resources>
+	<mvc:resources location="/images/" mapping="/images/**"></mvc:resources>
+	<mvc:resources location="/pages/" mapping="/pages/**"></mvc:resources>
+	<mvc:resources location="/font/" mapping="/font/**"></mvc:resources>
+	<mvc:resources location="/admin/" mapping="/admin/**"></mvc:resources>
+	<mvc:resources location="/upload/" mapping="/uploads/**"></mvc:resources>
+	
+	
+	
 	<!-- 两个标准配置 -->
 	<!--将springmvc不能处理的请求交给tomcat -->
-	<mvc:default-servlet-handler/>
+	 <mvc:default-servlet-handler/> 
 	<!-- 能支持springmvc跟岗偶记的一些功能，映射动态请求 -->
-	<mvc:annotation-driven/>
+	<!-- <mvc:annotation-driven/> -->
 	
 	
 </beans>

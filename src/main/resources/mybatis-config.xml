@@ -7,18 +7,18 @@
 	<settings>
 		<setting name="mapUnderscoreToCamelCase" value="true"></setting>
 	</settings>
-	
-	
+
+
 	<typeAliases>
-		<package name="com.yuanzhi.pojo"/>
+		<package name="com.yuanzhi.pojo" />
 	</typeAliases>
-	
+
 	<plugins>
-	 <plugin interceptor="com.github.pagehelper.PageInterceptor">
-			<!--分页参数合理化  -->
-			<property name="reasonable" value="true"/>
-	</plugin>
+		<plugin interceptor="com.github.pagehelper.PageInterceptor">
+			<!--分页参数合理化 -->
+			<property name="reasonable" value="true" />
+		</plugin>
 	</plugins>
-	
-	
+
+
 </configuration>

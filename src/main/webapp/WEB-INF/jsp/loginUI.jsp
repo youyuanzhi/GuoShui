@@ -63,7 +63,7 @@ html { overflow-y: hidden;  }
     <![endif]-->
 </head>
 <body scroll="no">
-<s:form name="form1" namespace="/sys" action="login_login">
+<form name="form1" method="post" action="${ctx}/login1">
 <div id="lo_tf">
 <div class="outside">
     <div class="head">
@@ -99,13 +99,14 @@ html { overflow-y: hidden;  }
 
 			<table width="100%" height="39" border="0" cellpadding="0" cellspacing="0">
               <tr>
-                <td background="${ctx}/images/login/shuru_03.png" width=""><table width="100%" border="0" cellpadding="0" cellspacing="0">
+                <td>
+                <input type="text" name="name"></td>
                   <tr>
                     <td align="left">
                     <s:textfield id="account" name="user.account" cssClass="password1" cssStyle="color: #767676" size="31"/>
                     </td>
                   </tr>
-                </table></td>
+                </td>
               </tr>
             </table></td>
           </tr>
@@ -119,13 +120,14 @@ html { overflow-y: hidden;  }
           <tr>
             <td height="40"><table width="100%" height="39" border="0" cellpadding="0" cellspacing="0">
               <tr>
-                <td background="${ctx}/images/login/shuru_03.png"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+              <td>
+                <input type="password" name="password"></td>
                   <tr>
                     <td align="left">
-                    	<s:password id="password" name="user.password" cssClass="password"  cssStyle="color: #767676" size="31"/>
+                    	<password id="password" name="user.password" cssClass="password"  cssStyle="color: #767676" size="31"/>
                     </td>
                   </tr>
-                </table></td>
+               </td>
               </tr>
             </table></td>
           </tr>
@@ -136,7 +138,7 @@ html { overflow-y: hidden;  }
           <tr>
             <td height="40"><table width="100%" border="0" cellpadding="0" cellspacing="0">
               <tr>
-                <td align="right"><a href="#" onclick="javascript:logins();"><img src="${ctx}/images/login/form_15.png" width="95" height="37"/></a></td>
+                <td align="right"><input type="submit" value="登录" /></td>
                 <td width="18">&nbsp;</td>
                 <td align="left"><img src="${ctx}/images/login/form_17.png" width="95" height="37" onclick="setClean()"/></td>
               </tr>
@@ -150,6 +152,6 @@ html { overflow-y: hidden;  }
 	<div class="foot">版权所有&nbsp;|&nbsp;国税局&nbsp;&nbsp;2014年</div>
 </div>
 </div>
-</s:form>
+</form>
 </body>
 </html>

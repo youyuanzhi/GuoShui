@@ -75,7 +75,7 @@
 					<tr>
 					    <td align="center"></td>
                         <td align="left"></td>
-                        <td align="left"><a><b></b><font color="red">欢迎您，${sessionScope.SYS_USER.name }</font></a></td>
+                        <td align="left"><a><b></b><font color="red">欢迎您，${user.name }</font></a></td>
                         <td align="center"><img src="${basePath}images/nsfw/help.png" width="12"height="17" /></td>
 						<td align="left"><a href="javascript:void(0)">帮助</a></td>
 						<td width="17" align="center"><img src="${basePath}images/nsfw/exit.png"width="14" height="14"/></td>
@@ -90,7 +90,7 @@
 	<div class="banner">
 		<div class="menu">
 			<ul class="clearfix">
-				<li><a href="${basePath}sys/home.action" target="_top">工作主页</a></li>
+				<li><a href="${basePath}/gzzy" target="_top">工作主页</a></li>
                 <li><a href="javascript:void(0);">行政管理</a></li>
                 <li><a href="javascript:void(0);">后勤服务</a></li>
                 <li><a href="javascript:void(0);">在线学习</a></li>

@@ -1,5 +1,6 @@
 package com.yuanzhi.pojo;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -15,6 +16,12 @@ public class Role {
 	
 	
 	public Set<String> getPrivilegesName() {
+		privilegesName = new HashSet<>();
+		if(privileges != null && privileges.size()>0) {
+			for(Privilege privilege:privileges) {
+				privilegesName.add(privilege.getCode());
+			}
+		}
 		return privilegesName;
 	}
 	public void setPrivilegesName(Set<String> privilegesName) {

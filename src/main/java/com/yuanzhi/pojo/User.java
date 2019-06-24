@@ -1,6 +1,7 @@
 package com.yuanzhi.pojo;
 
 import java.sql.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -22,6 +23,12 @@ public class User {
 
 
 	public Set<String> getRolesName() {
+		rolesName =new HashSet<>();
+		if(roles !=null && roles.size()>0) {
+			for(Role role : roles) {
+				rolesName.add(role.getRole_id());
+			}
+		}
 		return rolesName;
 	}
 	public void setRolesName(Set<String> rolesName) {

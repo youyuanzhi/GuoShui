@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
 <head>
     <%@include file="/common/header.jsp"%>
@@ -15,12 +16,12 @@
 	}
   	//新增
   	function doAdd(){
-  		document.forms[0].action = "${basePath}nsfw/role_addUI.action";
+  		document.forms[0].action = "${basePath}nsfw/role/addUI";
   		document.forms[0].submit();
   	}
   	//编辑
   	function doEdit(id){
-  		document.forms[0].action = "${basePath}nsfw/role_editUI.action?role.roleId=" + id;
+  		document.forms[0].action = "${basePath}nsfw/role/editUI?id="+id;
   		document.forms[0].submit();
   	}
   	//删除
@@ -51,7 +52,7 @@
                 <div class="c_crumbs"><div><b></b><strong>角色管理 </strong></div> </div>
                 <div class="search_art">
                     <li>
-                        角色名称：<s:textfield name="role.name" cssClass="s_text" id="roleName"  cssStyle="width:160px;"/>
+                        角色名称：<textfield name="RName" cssClass="s_text" id="roleName"  cssStyle="width:160px;"/>
                     </li>
                     <li><input type="button" class="s_button" value="搜 索" onclick="doSearch()"/></li>
                     <li style="float:right;">
@@ -69,26 +70,36 @@
                             <td width="80" align="center">状态</td>
                             <td width="120" align="center">操作</td>
                         </tr>
-                       		<s:iterator value="pageResult.items" status="st">
-                            <tr <s:if test="#st.odd">bgcolor="f8f8f8"</s:if> >
-                                <td align="center"><input type="checkbox" name="selectedRow" value="<s:property value='roleId'/>"/></td>
-                                <td align="center"><s:property value="name"/></td>
+                       		<c:forEach items="${page.list }" var="role" >
+                            <tr <c:if test="#st.odd">bgcolor="f8f8f8"</c:if> >
+                                <td align="center"><input type="checkbox" name="selectedRow" value="${role.role_id }"/></td>
+                                <td align="center">${role.name }</td>
                                 <td align="center">
-                                	<s:iterator value="rolePrivileges">
-                                		<s:property value="#privilegeMap[id.code]"/>
-                                	</s:iterator>	
+                                	<c:forEach items="${role.privileges }" var="privilege">
+                                		${privilege.code } &nbsp;
+                                	</c:forEach>	
                                 </td>
-                                <td align="center"><s:property value="state==1?'有效':'无效'"/></td>
+                                <td align="center">${role.state == 1 ? "有效":"无效" }</td>
                                 <td align="center">
-                                    <a href="javascript:doEdit('<s:property value='roleId'/>')">编辑</a>
-                                    <a href="javascript:doDelete('<s:property value='roleId'/>')">删除</a>
+                                    <a href="javascript:doEdit('${role.role_id }')">编辑</a>
+                                    <a href="javascript:doDelete('${role.role_id }')">删除</a>
                                 </td>
                             </tr>
-                           </s:iterator>
+                           </c:forEach>
                     </table>
                 </div>
             </div>
-			<jsp:include page="/common/pageNavigator.jsp"/>
+			<%-- <jsp:include pageNum="/common/pageNavigator.jsp"/> --%>
+			总共:${page.total }&nbsp;条记录,
+                    总页数：${page.pages } &nbsp;,当前第${page.pageNum }页,
+       <a href="${basePath}nsfw/role/listUI?pageNum=1">首页</a>
+       <c:if test="${page.pageNum > 1}">
+       <a href="${basePath}nsfw/role/listUI?page=${page.pageNum - 1}">上一页</a>
+       </c:if>
+       <c:if test="${page.pageNum < page.pages }">
+       <a href="${basePath}nsfw/role/listUI?page=${page.pageNum + 1}">下一页</a>
+       </c:if>
+        <a href="${basePath}nsfw/role/listUI?page=${page.pages}">尾页</a>
         </div>
     </div>
 </form>

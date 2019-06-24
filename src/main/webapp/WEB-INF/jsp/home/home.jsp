@@ -2,7 +2,7 @@
 <%
     pageContext.setAttribute("ctx", request.getContextPath()) ;
 %>
-
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
@@ -74,7 +74,7 @@
                     <td align="center"><img src="${ctx}/images/home/help.png" width="12" height="17"  /></td>
                     <td align="left"><a href="javascript:void(0);">帮助</a></td>
                     <td align="center"><img src="${ctx}/images/home/exit.png" width="14" height="14"   /></td>
-                    <td align="left" valign="middle" ><a href="${ctx }/sys/login_logout.action">退出</a></td>
+                    <td align="left" valign="middle" ><a href="${ctx }/loginout">退出</a></td>
                 </tr>
             </table>
         </td>
@@ -88,7 +88,7 @@
         <li><a href="javascript:void(0);">行政管理</a></li>
         <li><a href="javascript:void(0);">后勤服务</a></li>
         <li><a href="javascript:void(0);">在线学习</a></li>       
-        <li><a href="${ctx }/nsfw/home_frame.action">纳税服务</a> </li>
+        <li><a href="${ctx}/nsfw/frame">纳税服务</a> </li>
         <li><a href="javascript:void(0);">我的空间</a></li>
     </ul>
 </div>
@@ -101,15 +101,16 @@
             <div class="left_grzxbt">
                 <h1>个人资料</h1>
             </div>
-            <table width="98%" border="0" align="center">
+            <table width="98%" border="0" align="center">           
                 <tr>
                     <td width="76" height="100" align="center" valign="middle">
                         <div class="left-tx">
-                            <s:if test="%{#session.SYS_USER.headImg != null && #session.SYS_USER.headImg !=''}">
-                            	<img src="${ctx}/upload/<s:property value='#session.SYS_USER.headImg'/>" width="70" height="70" />
-                            </s:if><s:else>
+						    <c:if test="${user.headImg ne null && not empty user.headImg }">
+                                <img src="${ctx}/${user.headImg }" width="70" height="70" />
+                            </c:if>
+                            <c:if test="${user.headImg eq null ||empty user.headImg}">
 								<img src="${ctx}/images/home/gs09.png" width="70" height="70" />
-							</s:else>
+							</c:if>
                         </div>
                     </td>
                     <td width="5%"><img src="${ctx}/images/home/gs10.png" width="4" height="59" alt="" /></td>
@@ -118,11 +119,11 @@
                             <td colspan="2" style=" font-weight:bold; color:#3a7daa;"><s:property value="#session.SYS_USER.name"/></td>
                         </tr>
                         <tr>
-                            <td colspan="2">所属部门：<s:property value="#session.SYS_USER.dept"/></td>
+                            <td colspan="2">所属部门：${user.dept}</td>
                         </tr>
                     </table>
                     </td>
-                </tr>
+                </tr> 
             </table>
         </div>
         <!-- }个人资料 -->
@@ -136,7 +137,16 @@
                 <h1>信息列表</h1>
             </div>
             <table width="98%" border="0" align="center">
-            	<s:iterator value="#infoList">
+            	
+            	<c:forEach items="${infos }" var="info">
+            		<tr>
+            			<td><a href="${ctx}/gzzy/showInfoOne?infoId=${info.infoId}"/>${info.title }</td>
+            			<td>${info.content}</td>
+            			<td>${info.create_time }</td>
+            		</tr>
+            	</c:forEach>
+            	
+            	<!-- <s:iterator value="#infoList">
                 <tr>
                     <td height="23">
                     <s:url var="infoViewUrl" action="home_infoViewUI" namespace="/sys" >
@@ -150,7 +160,7 @@
                     <td width="150px"><s:property value="creator"/></td>
                     <td width="150px"><s:date name="createTime" format="yyyy-MM-dd HH:mm"/></td>
                 </tr>
-                </s:iterator>
+                </s:iterator> -->
             </table>
         </div>
     </div>

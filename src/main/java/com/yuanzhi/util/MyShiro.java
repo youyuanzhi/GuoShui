@@ -39,8 +39,10 @@ public class MyShiro extends AuthorizingRealm{
 			info.setRoles(user.getRolesName());
 			//通过角色得到用户的权限，
 			List<Role> roles = user.getRoles();
+			System.out.println("user"+user.getRolesName());
 			for(Role role : roles) {
 				info.addStringPermissions(role.getPrivilegesName());
+				System.out.println(role.getPrivilegesName());
 			}
 			return info;
 		}
@@ -54,6 +56,7 @@ public class MyShiro extends AuthorizingRealm{
 		//使用token保存提交的登录信息
 		UsernamePasswordToken token = (UsernamePasswordToken)authenticationToken;
 		User user=userService.findByName(token.getUsername());
+		System.out.println("user:" + user);
 		if(user!=null) {
 			//若存在该用户则存到
 			return new SimpleAuthenticationInfo(user.getName(),user.getPassword(),getName());

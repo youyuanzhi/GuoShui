@@ -40,49 +40,48 @@
 	</bean>
 	<!--===================================================  -->
 	
-	<!-- 配置一个可以执行批量的sqlSession -->
+<!-- 配置一个可以执行批量的sqlSession -->
 	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg>	
-		<constructor-arg name="executorType" value="BATCH"></constructor-arg>
+		<constructor-arg name="executorType" value="SIMPLE"></constructor-arg>
 	</bean>
 	<!-- ============================ -->
 	
 	<!-- ====================事务控制============== -->
-	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<!--控制住数据源 -->
+<!-- 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		控制住数据源
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
-	<!-- 开启基于注解的事务 或想xml事务-->
+	开启基于注解的事务 或想xml事务
 	<aop:config>
-		<!--切入点表达式  -->
+		切入点表达式 
 		<aop:pointcut expression="execution(* com.yuanzhi.service..*(..))" id="txPoint"/>
-		<!-- 配置事务增强 -->
+		配置事务增强
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="txPoint"/>
 	</aop:config>
 	
-	<!-- 配置事务增强，事务如何切入 -->
+	配置事务增强，事务如何切入
 	 <tx:advice id="txAdvice" transaction-manager="transactionManager">
 	 	<tx:attributes>
-	 	<!-- 所有方法都是事务方法 -->
+	 	所有方法都是事务方法
 	 		<tx:method name="*"/>
-	 		<!-- 以get开始的所有方法 -->
+	 		以get开始的所有方法
 	 		<tx:method name="get*" read-only="true"/>
 	 	</tx:attributes>
-	 </tx:advice>
+	 </tx:advice> -->
 	 
 	 <!-- spring配置文件的核心点 -->
 	 
-	 <bean id="myShiro" class="com.yuanzhi.util.MyShiro"> 
-	 </bean>
-	 <bean id="cacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager">
-	 	
-	 </bean>
+	 <bean id="roleOrOne" class="com.yuanzhi.util.CustomRolesAuthorizationFilter"></bean>
+	 
+	 <bean id="myShiro" class="com.yuanzhi.util.MyShiro"></bean>
+	 <bean id="cacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager"></bean>
 		 
 	 <!-- 配置权限管理器 -->
 	 <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
 	 <!-- 配置对应的realm，即myshiro -->
-	 <property name="realm" ref="myShiro"></property>
-	 <property name="cacheManager" ref="cacheManager"></property>
+		 <property name="realm" ref="myShiro"></property>
+		 <property name="cacheManager" ref="cacheManager"></property>
 	 </bean>
 	 
 	 
@@ -93,23 +92,40 @@
 	 	<!-- 配置登录的请求地址 -->
 	 	<property name="loginUrl" value="/login"></property>
 	 	<!-- 配置登录成功后跳转的地址，如果访问的是非login请求，则跳转到你访问的页面 -->
-	 	<property name="successUrl" value="/user"></property>
+	 	<property name="successUrl" value="/gzzy"></property>
 	 	<!-- 如果请求的资源，不在你的权限范围之内，直接跳转到403请求地址 -->
 	 	<property name="unauthorizedUrl" value="/403"></property>
+	 	
+	 		<property name="filters">  
+            <map>    
+                 <entry key="roles" value-ref="roleOrOne"/>
+            </map> 
+
+        </property>
+	 	
 		<!-- 配置权限 -->
 		<property name="filterChainDefinitions">
 			<value>
 				<!--anon表示此地址不需要任何权限  -->
-				common/**=anon
-				css/**=anon
-				images/**=anon
-				js/**=anon
+				/common/**=anon
+				/css/**=anon
+				/images/**=anon
+				/js/**=anon
+				/upload/**=anon
+				/WEB-INF/**=anon
+				/login1=anon
+				<!-- 工作主页的角色权限 -->
+				
+				/gzzy/**=roles["1,2,3,4,5,6"]
+				/nsfw/**=roles["1,2,3"]
+			
 				<!-- 表示进去/user路径必须是使用grzx权限的用户 -->
-				/user=perms[grzx]
-				<!--想要使用这个路径的必须是 -->
+			<!-- 	/user=perms[hqfw]
+				想要使用这个路径的必须是
 				/user/delete=roles[1]
 				/user/add=roles[2]
-				/user/edit/**=roles[1]
+				/user/edit/**=roles[1] -->
+				
 				<!-- 所有的请求(除去上面的无需访问权限的资源都需要通过登录验证，如果未登录则跳转到/login) -->
 				/**=authc
 			</value>
